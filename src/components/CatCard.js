@@ -4,7 +4,7 @@ import { Card, CardMedia, Container, Grid, Typography } from '@mui/material';
 const CatCard = ({cat}) => {
     return (
         <Grid item={true} xs={6} md={3}>
-            <Card className='card'>
+            <Card sx={{ '&:hover': { border: '1px solid #00ACC1' } }}>
                 <CardMedia
                     component="img"
                     alt="green iguana"
