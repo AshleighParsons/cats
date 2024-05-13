@@ -19,6 +19,7 @@ const CatsGrid = () => {
     };
 
     const getCatBreeds = async () => {
+        // get all cat breeds for filter
         await axios.get("https://api.thecatapi.com/v1/breeds", requestOptions)
             .then(response => {
                 setBreeds([...new Set(response.data.map(breed => ({ label: breed.name, id: breed.id })))]);
@@ -45,11 +46,15 @@ const CatsGrid = () => {
                     getOptionKey={(option) => option.id}
                     sx={{ width: 250 }}
                     renderInput={(params) => <TextField {...params} label="Choose a breed" />}
-                    onChange={(event, newValue) => {
-                        if (newValue) {
-                          setContext(newValue.id);
+                    onChange={(event, newInputValue, reason) => {
+                        if (reason === 'clear') {
+                            setContext('');
+                        } else {
+                            if(newInputValue) {
+                                setContext(newInputValue.id);
+                            }
                         }
-                    }}
+                      }}
                 />
             </Box>
         </Container>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardMedia, Container, Grid } from '@mui/material';
+import { Card, CardMedia, Container, Grid, Typography } from '@mui/material';
 
 const CatCard = ({cat}) => {
     return (
@@ -12,7 +12,7 @@ const CatCard = ({cat}) => {
                     image={cat.imgUrl}
                 />
                 <Container sx={{ p: 2 }}>
-                    <span>{cat.name}</span>
+                    <Typography variant="body1">{cat.name}</Typography>
                 </Container>
             </Card>
         </Grid>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import CatCard from './CatCard';
 import Filter from './Filter';
 import { Container } from '@mui/material';
@@ -25,10 +25,12 @@ const CatsGrid = () => {
     useEffect(() => {
         const getCats = async () => {
             try {
+                //  get cat breeds based on filter
                 const url = context ? `https://api.thecatapi.com/v1/breeds/search?q=${context}&attach_image=1` : `https://api.thecatapi.com/v1/breeds?limit=10&page=0`;
                 const response = await axios.get(url, requestOptions);
                 const catsData = response.data;
                 const catsWithImages = await Promise.all(catsData.map(async (cat) => {
+                    // get cat image based on breed id of each cat
                     const imgResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_id=${cat.id}`, requestOptions);
                     cat.imgUrl = imgResponse.data[0].url;
                     return cat;
@@ -45,6 +47,7 @@ const CatsGrid = () => {
     const handleScroll = () => {
         const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
         if (scrollTop + clientHeight === scrollHeight) {
+            // get more cats you reach the end of the page
             setCurrentPage((prevPage) => prevPage + 1);
             loadMoreCats();
         }
@@ -52,6 +55,7 @@ const CatsGrid = () => {
 
     const loadMoreCats = async () => {
         const nextPage = currentPage + 1;
+        // get next page of cat breeds
         const response = await axios.get(`https://api.thecatapi.com/v1/breeds?limit=10&page=${nextPage}`, requestOptions);
         const newCats = response.data.map(async (cat) => {
             const imgResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_id=${cat.id}`, requestOptions);
@@ -67,15 +71,22 @@ const CatsGrid = () => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, []);
+    });
 
     return (
         <Container sx={{ p: 2 }} maxWidth="lg">
             <Filter />
             <Grid container spacing={3}>
-                {cats.map((cat, i) => {
-                    return <CatCard key={i} cat={cat} />;
-                })}
+                {/* if cats.length > 0 show a grid of cats, otherwise show text saying no cats */}
+                {cats.length > 0 ? (
+                    cats.map((cat, i) => {
+                        return <CatCard key={i} cat={cat} />;
+                    })
+                ) : (
+                    <Grid item xs={12}>
+                        <Typography variant="body1">No cats found.</Typography>
+                    </Grid>
+                )}
             </Grid>
         </Container>
     );
