@@ -9,7 +9,7 @@ It makes use of Material UI for styling.
 Clone the project
 
 ```bash
-  git clone
+  git clone https://github.com/AshleighParsons/cats.git
 ```
 
 Go to the project directory
